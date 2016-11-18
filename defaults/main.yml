@@ -1,7 +1,9 @@
 ---
 
 httpd_configuration:
-    - regexp: "^ServerSignature"
-      line: "ServerSignature Off"
-    - regexp: "^ServerTokens"
-      line: "ServerTokens ProductOnly"
+  # Harder httpd by removing ServerSignature
+  - regexp: "^ServerSignature"
+    line: "ServerSignature Off"
+  # Harder httpd by removing ServerTokens
+  - regexp: "^ServerTokens"
+    line: "ServerTokens ProductOnly"

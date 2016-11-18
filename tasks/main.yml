@@ -1,15 +1,14 @@
 ---
 
 - name: Install Apache web server
-  yum: pkg={{ item }} state=installed
-  with_items:
-     - httpd
+  yum:
+    pkg: httpd
+    state: latest
 
-- name: Set up httpd
-  service: name=httpd enabled=yes
-
-- name: Start the httpd
-  service: name=httpd state=started
+- name: Set up httpd on boot
+  service:
+    name: httpd
+    enabled: yes
 
 - name: Create test index.html
   template:
@@ -27,3 +26,8 @@
     state: present
   with_items: "{{ httpd_configuration }}"
   notify: restart httpd
+
+- name: Start the httpd
+  service:
+    name: httpd
+    state: started
