@@ -1,0 +1,7 @@
+---
+
+httpd_configuration:
+    - regexp: "^ServerSignature"
+      line: "ServerSignature Off"
+    - regexp: "^ServerTokens"
+      line: "ServerTokens ProductOnly"

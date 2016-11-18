@@ -18,3 +18,12 @@
     owner: root
     group: root
     mode: 0664
+
+- name: Configure Apache
+  lineinfile:
+    dest: /etc/httpd/conf/httpd.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items: "{{ httpd_configuration }}"
+  notify: restart httpd
