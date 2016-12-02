@@ -2,8 +2,12 @@
 
 - name: Install Apache web server
   yum:
-    pkg: httpd
+    pkg: "{{ item }}"
     state: latest
+  with_items:
+    - httpd
+    - mod_ssl
+  notify: restart httpd
 
 - name: Set up httpd on boot
   service:
