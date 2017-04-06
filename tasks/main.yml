@@ -1,6 +1,7 @@
 ---
 
 - name: Install Apache web server
+  become: yes
   yum:
     pkg: "{{ item }}"
     state: latest
@@ -10,19 +11,22 @@
   notify: restart httpd
 
 - name: Set up httpd on boot
+  become: yes
   service:
     name: httpd
     enabled: yes
 
 - name: Create test index.html
+  become: yes
   template:
     src: index.html.tpl
     dest: /var/www/html/index.html
-    owner: root
-    group: root
+    owner: apache
+    group: apache
     mode: 0664
 
-- name: Configure Apache
+- name: Configure Apache httpd.conf
+  become: yes
   lineinfile:
     dest: /etc/httpd/conf/httpd.conf
     regexp: "{{ item.regexp }}"
@@ -31,7 +35,32 @@
   with_items: "{{ httpd_configuration }}"
   notify: restart httpd
 
+# - name: create document root directories
+#   become: yes
+#   file:
+#     name: "{{ item.document_root }}"
+#     owner: apache
+#     group: apache
+#     mode: '0751'
+#     state: directory
+#   with_items: "{{ apache_vhosts }}"
+#   when: apache_vhosts is defined
+#
+# - name: configure virtual hosts
+#   become: yes
+#   template:
+#     src: vhost.conf.j2
+#     dest: "/etc/httpd/conf.d/{{ item.name }}.conf"
+#     owner: root
+#     group: root
+#     mode: 0644
+#   notify:
+#     - restart httpd
+#   with_items: "{{ apache_vhosts }}"
+#   when: apache_vhosts is defined
+
 - name: Start the httpd
+  become: yes
   service:
     name: httpd
     state: started

@@ -1,0 +1,33 @@
+# Apache HTTP server -- main configuration
+#
+# {{ ansible_managed }}
+
+## General configuration
+ServerRoot {{ httpd_ServerRoot }}
+Listen {{ httpd_Listen }}
+
+<VirtualHost {{ item.addr | default('*:80') }}>
+    ServerName {{ item.server_name }}
+    DocumentRoot {{ item.document_root }}
+    {% if item.server_alias is defined -%}
+    ServerAlias {{ item.server_alias }}
+    {% endif -%}
+    {% if item.server_admin is defined -%}
+    ServerAdmin {{ item.server_admin }}
+    {% endif -%}
+    ErrorLog "{{ item.document_root }}/logs/error_log"
+
+    {% if item.params is defined %}
+    {% for param in item.params %}
+    {{ param }}
+    {% endfor %}
+    {% endif %}
+
+    <Directory "{{ item.document_root }}">
+        AllowOverride None
+        Options -Indexes +FollowSymLinks
+        Order allow,deny
+        Allow from all
+        Require all granted
+    </Directory>
+</VirtualHost>

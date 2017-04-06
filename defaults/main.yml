@@ -7,3 +7,23 @@ httpd_configuration:
   # Harder httpd by removing ServerTokens
   - regexp: "^ServerTokens"
     line: "ServerTokens ProductOnly"
+
+httpd_ServerRoot: /var/www/html
+httpd_Listen: 80
+
+apache_vhosts:
+  - name: tolis
+    server_name: tolis.local
+    server_admin: admin@tolis.local
+    document_root: /var/www/html/wp2
+    virtualhost_configuration:
+      - ErrorLog /tmp/error.log
+
+httpd_vhost:
+  - name: tolis
+    server_name: tolis.local
+    server_admin: admin@tolis.local
+    # server_alias: aaa.tolis.local
+    document_root: /var/www/html/wp2
+    params:
+      - ErrorLog /tmp/error.log
